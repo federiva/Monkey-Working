@@ -1,0 +1,37 @@
+!#~/bin/bash
+#exploramos el archivo y encontramos que la tabla esta entre las lineas 391 y 36055
+#We explore the downloaded file and found that the data that we are interested in is between lines 391 and 36055 and inside an HTML table
+#We create a function in bash using cat and awk to print out the required fields
+function parseHTML(){
+  cat "$1" | awk '
+    {if (FNR >= 391 && FNR <= 36055){
+      if (match($0, "<tr>")) {
+        contador=1;
+        priceExists=0;
+        dateExists=0;
+      }
+      if (contador==2) {
+        if (match($0,"[[:digit:]]*/[[:digit:]]*/[[:digit:]]*")) {
+          date=substr($0,RSTART,RLENGTH);
+          dateExists=1;
+        }
+      }
+      if (contador==6) {
+        if (match($0,"[[:digit:]]*\\.[[:digit:]]*")) {
+          price=substr($0,RSTART,RLENGTH);
+          priceExists=1;
+        }
+      }
+      if (match($0, "</tr>") && dateExists==1 && priceExists==1) {
+        print date","price;
+      }
+      contador++
+    }
+  }'
+}
+
+#write the csv header
+echo fecha,divisa_venta >> data_peso_dolar.csv
+#run the function redirecting the output to the .csv file 
+parseHTML ./data/Editorial\ Errepar\ -\ Cotización\ Actual\ e\ Histórica\ del\ Dolar.html >> data_peso_dolar.csv
+
