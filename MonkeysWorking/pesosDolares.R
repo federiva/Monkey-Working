@@ -35,5 +35,25 @@ plot(dataDolar,
 abline(v=dataDolar$fecha[3552], lty=3)
 dev.off()
 
-
+plotPNGs <- function(data_input, steps){
+  iteracionN <- 1
+  for (i in seq(1,nrow(data_input),steps)){
+    filenameOut <- paste("./pngs/file_",formatC(iteracionN,width=5, flag=0),".png", sep="")
+    print(paste("Graficando:", filenameOut))
+    png(filename = filenameOut, width = 8, height = 6,units = "cm", res = 300 )
+    plot(data_input[1:i,],
+         xlim=c(min(data_input[,1]), max(data_input[,1])),
+         ylim=c(min(data_input[,2]), max(data_input[,2])),
+         type = "l", 
+         xlab="Fecha",
+         ylab="Pesos por dólar",
+         cex.axis=0.5,
+         cex.lab=0.5, 
+         las = 3)
+    dev.off()
+    iteracionN <- iteracionN + 1
+  }
+}
+plotPNGs(dataDolar[1:20,], 5)
+plotPNGs(dataDolar, 10)
 save.image(file = "DataEnvironment.rdata")
