@@ -40,9 +40,10 @@ function parseHTML(){
     }
   }'
 }
-
-#write the csv header
-echo fecha,divisa_venta >> data_peso_dolar.csv
-#run the function redirecting the output to the .csv file 
-parseHTML ./data/Editorial\ Errepar\ -\ Cotización\ Actual\ e\ Histórica\ del\ Dolar.html >> data_peso_dolar.csv
+################## The following is not part of the previous function ##################
+################## Is only an EXAMPLE on how to use it #################################
+#write the .csv header - Uncomment the next line to execute the example
+#echo fecha,divisa_venta >> data_peso_dolar.csv
+#run the function redirecting the output to the .csv file - Uncomment the next line to execute the example
+#parseHTML ./data/Editorial\ Errepar\ -\ Cotización\ Actual\ e\ Histórica\ del\ Dolar.html >> data_peso_dolar.csv
 
