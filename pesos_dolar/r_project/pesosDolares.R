@@ -1,59 +1,86 @@
-load(file = "DataEnvironment.rdata")
+# Load the environment, only for local use
+# load(file = "DataEnvironment.rdata")
 
-dataDolar <- read.csv("../data_peso_dolar.csv")
-plot(c(1:length(dataDolar$fecha)),dataDolar$divisa_venta, type ="l")
+# Reading data, formatting, and first plot  ------------------------------------------------------------
+# Read data
+dataDolar <- read.csv("../data/data_peso_dolar.csv")
+# Converting to an object of class date 
 dataDolar$fecha <- as.Date(dataDolar$fecha, "%d/%m/%Y")
-plot(dataDolar, type="l")
-cambio <- function(datos, ventana, dif = T){
-  resultado <- list()
-  for (i in 1:c(length(datos))){
-    if (i <= (length(datos)-ventana)){
-      if (dif == F){
-        res_parc <- sum(c(datos[i]:datos[i+ventana-1]))
-        }
-      if (dif == T){
-        res_parc <- datos[i+ventana-1] - datos[i]}
-    }
-    resultado[[i]] <- res_parc/ventana
-  }
-  return(resultado)
-}
-
-which(dataDolar$fecha == "2015-12-1")
-cambio_3 <- cambio(dataDolar$divisa_venta, 10, dif=T)
-png(filename = "Grafico_Dolares_Ardilla.png", width = 18, height = 15,units = "cm", res = 300 )
-par(mfrow=c(2,1))
-plot(dataDolar$fecha, cambio_3, 
+# Plotting the first plot and saving it as a .png file
+# save the plot as a png file
+png(filename = "firstPlotDollarPriceVSDate.png", width = 17, height = 12,units = "cm", res = 300 )
+plot(x = dataDolar$fecha,
+     y = dataDolar$divisa_venta,
      type = "l", 
-     xlab="Fecha",
-     ylab="Tasa de cambio en 10 dias")
-abline(v=dataDolar$fecha[3552], lty=3)
-plot(dataDolar, 
-     type ="l", 
-     xlab="Fecha",
-     ylab="Pesos por dólar (divisa)")
-abline(v=dataDolar$fecha[3552], lty=3)
+     xlab="Date",
+     ylab="Argentine Peso / US Dollar")
 dev.off()
-
-plotPNGs <- function(data_input, steps){
-  iteracionN <- 1
-  for (i in seq(1,nrow(data_input),steps)){
-    filenameOut <- paste("./pngs/file_",formatC(iteracionN,width=5, flag=0),".png", sep="")
-    print(paste("Graficando:", filenameOut))
-    png(filename = filenameOut, width = 8, height = 6,units = "cm", res = 300 )
-    plot(data_input[1:i,],
-         xlim=c(min(data_input[,1]), max(data_input[,1])),
-         ylim=c(min(data_input[,2]), max(data_input[,2])),
-         type = "l", 
-         xlab="Fecha",
-         ylab="Pesos por dólar",
-         cex.axis=0.5,
-         cex.lab=0.5, 
-         las = 3)
-    dev.off()
-    iteracionN <- iteracionN + 1
+# As the days were mostly in weekends (due to Argentinian's elections
+# are made in sunday), we changed the original date 
+# to the nearest week day because the data only has weekdays .
+asume_nestor <- as.Date("2003-05-26")
+asume_cristina_1 <- as.Date("2007-12-10")
+asume_cristina_2 <- as.Date("2011-12-12")
+asume_miauri <- as.Date("2015-12-11")
+# We wrote a function using the limit dates previously used in order to add a new column of factors by president in our data.frame 
+factorPresidencias <- function(date_vectors){
+  # Initialize an empty list
+  lista_factor_presidencias <- list()
+  # Initialize a counter
+  i <- 1 
+  for (datos in date_vectors){
+    if (datos < asume_nestor){
+      lista_factor_presidencias[[i]] <- "OTRO"
+    }
+    else if(datos >= asume_nestor & datos < asume_cristina_1){
+      lista_factor_presidencias[[i]] <- "NK"
+    }
+    else if(datos >= asume_cristina_1 & datos < asume_cristina_2){
+      lista_factor_presidencias[[i]] <- "CFK1"
+    }
+    else if(datos >= asume_cristina_2 & datos < asume_miauri){
+      lista_factor_presidencias[[i]] <- "CFK2"
+    }
+    else if(datos >= asume_miauri){
+      lista_factor_presidencias[[i]] <- "MM"
+    }
+    i <- i + 1
   }
+  return(unlist(lista_factor_presidencias))
 }
-plotPNGs(dataDolar[1:20,], 5)
-plotPNGs(dataDolar, 10)
-save.image(file = "DataEnvironment.rdata")
+factor_presidente <- factorPresidencias(dataDolar$fecha)
+# We add the column as factor to the dataframe
+dataDolar$Presidencia <- factor_presidente
+dataDolar$Presidencia <- as.factor(dataDolar$Presidencia)
+# Explore the dataset
+str(dataDolar)
+# Plotting ----------------------------------------------------------------
+
+# save the plot as a png file
+png(filename = "secondPlotDollarPriceVSDate.png", width = 17, height = 12,units = "cm", res = 300 )
+# set the background
+par("bg"="white")
+# Choose the colors
+colores <- c("orange3",  "steelblue4", "red","yellowgreen","gray20")
+# Set the colors
+palette(colores)
+# Plot
+plot(x = dataDolar$fecha,
+     y = dataDolar$divisa_venta,
+     xlab="Date",
+     ylab="Argentine Peso / US Dollar",
+     type="p",
+     col=dataDolar$Presidencia,
+     cex=0.25
+)
+# Add legend
+legend("topleft", legend = levels(dataDolar$Presidencia),
+       col = 1:5,
+       lwd = c(3,3,3,3),
+       cex = 0.75,
+       box.lty = 0)
+dev.off()
+# Others ------------------------------------------------------------------
+
+# Save the environment, only for local use
+# save.image(file = "DataEnvironment.rdata")
