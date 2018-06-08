@@ -1,37 +1,49 @@
 !#~/bin/bash
-#exploramos el archivo y encontramos que la tabla esta entre las lineas 391 y 36055
-#We explore the downloaded file and found that the data that we are interested in is between lines 391 and 36055 and inside an HTML table
-#We create a function in bash using cat and awk to print out the required fields
+# We explore the downloaded file and found that the data that we are interested in is in between lines 391 and 
+# 36055 and inside an HTML table
+# We create a function in bash using cat and awk to print out the required fields
 function parseHTML(){
+  # print and pipe to awk
   cat "$1" | awk '
+    # printing between the desired lines
     {if (FNR >= 391 && FNR <= 36055){
+      # if we found the beggining of a row then: a. We set the counter as 1; b. We set priceExists as 0 and
+      # c. We set dateExists as 0
       if (match($0, "<tr>")) {
-        contador=1;
+        counter=1;
         priceExists=0;
         dateExists=0;
       }
-      if (contador==2) {
+      # if the counter is 2 then we look for a date; and if it's found then we extract it to a local variable
+      # and set dateExists to 1
+      if (counter==2) {
         if (match($0,"[[:digit:]]*/[[:digit:]]*/[[:digit:]]*")) {
           date=substr($0,RSTART,RLENGTH);
           dateExists=1;
         }
       }
-      if (contador==6) {
+      # If the counter is 6 then we look for a price with the format [number(dot)number] if the pattern is found then 
+      # we extract it to a local variable and set priceExists to 1
+      if (counter==6) {
         if (match($0,"[[:digit:]]*\\.[[:digit:]]*")) {
           price=substr($0,RSTART,RLENGTH);
           priceExists=1;
         }
       }
+      # if we found the end of a row, if dateExists is equal to 1 and so it is priceExists then we 
+      # print the date and the price 
       if (match($0, "</tr>") && dateExists==1 && priceExists==1) {
         print date","price;
       }
-      contador++
+      # increment the counter
+      counter++
     }
   }'
 }
-
-#write the csv header
-echo fecha,divisa_venta >> data_peso_dolar.csv
-#run the function redirecting the output to the .csv file 
-parseHTML ./data/Editorial\ Errepar\ -\ Cotización\ Actual\ e\ Histórica\ del\ Dolar.html >> data_peso_dolar.csv
+################## The following is not part of the previous function ##################
+################## Is only an EXAMPLE on how to use it #################################
+#write the .csv header - Uncomment the next line to execute the example
+#echo fecha,divisa_venta >> data_peso_dolar.csv
+#run the function redirecting the output to the .csv file - Uncomment the next line to execute the example
+#parseHTML ./data/Editorial\ Errepar\ -\ Cotización\ Actual\ e\ Histórica\ del\ Dolar.html >> data_peso_dolar.csv
 
