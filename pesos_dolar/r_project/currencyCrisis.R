@@ -1,47 +1,9 @@
 load("currencyCrisis.RData")
 
-dataCurrency <- read.csv("../data/data_peso_dolar.csv")
+pesoDollarDataSet <- read.csv("../data/pesoDollarDataSet.csv")
 # Converting to an object of class date 
-dataCurrency$fecha <- as.Date(dataCurrency$fecha, "%d/%m/%Y")
-# As the days were mostly in weekends (due to Argentinian's elections
-# are made in sunday), we changed the original date 
-# to the nearest week day because the data only has weekdays .
-asume_nestor <- as.Date("2003-05-26")
-asume_cristina_1 <- as.Date("2007-12-10")
-asume_cristina_2 <- as.Date("2011-12-12")
-asume_miauri <- as.Date("2015-12-11")
-# We wrote a function using the limit dates previously used in order to add a new column of factors by president in our data.frame 
-factorPresidencias <- function(date_vectors){
-  # Initialize an empty list
-  lista_factor_presidencias <- list()
-  # Initialize a counter
-  i <- 1 
-  for (datos in date_vectors){
-    if (datos < asume_nestor){
-      lista_factor_presidencias[[i]] <- "OTRO"
-    }
-    else if(datos >= asume_nestor & datos < asume_cristina_1){
-      lista_factor_presidencias[[i]] <- "NK"
-    }
-    else if(datos >= asume_cristina_1 & datos < asume_cristina_2){
-      lista_factor_presidencias[[i]] <- "CFK1"
-    }
-    else if(datos >= asume_cristina_2 & datos < asume_miauri){
-      lista_factor_presidencias[[i]] <- "CFK2"
-    }
-    else if(datos >= asume_miauri){
-      lista_factor_presidencias[[i]] <- "MM"
-    }
-    i <- i + 1
-  }
-  return(unlist(lista_factor_presidencias))
-}
-factor_presidente <- factorPresidencias(dataCurrency$fecha)
-# We add the column as factor to the dataframe
-dataCurrency$Presidencia <- factor_presidente
-dataCurrency$Presidencia <- as.factor(dataCurrency$Presidencia)
-# Explore the dataset
-str(dataCurrency)
+pesoDollarDataSet$fecha <- as.Date(pesoDollarDataSet$fecha, "%Y-%m-%d")
+str(pesoDollarDataSet)
 # Daily Percentage Change ----------------------------------------------------
 # What's the daily percentage change of the exchange rate ARS/USD? 
 DPC <- function(input_data, index){
@@ -58,7 +20,7 @@ DPC <- function(input_data, index){
   return(output_data)
 }
   
-variation <- DPC(input_data = dataCurrency,index = 2)
+variation <- DPC(input_data = pesoDollarDataSet,index = 2)
 
 plot(variation$fecha, variation$variation, type="p", 
      col=variation$Presidencia,

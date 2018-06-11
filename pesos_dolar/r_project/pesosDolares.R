@@ -28,22 +28,18 @@ factorPresidencias <- function(date_vectors){
   lista_factor_presidencias <- list()
   # Initialize a counter
   i <- 1 
-  for (datos in date_vectors){
-    if (datos < asume_nestor){
+  for (datos in date_vectors) {
+    if (datos < asume_nestor) {
       lista_factor_presidencias[[i]] <- "OTRO"
-    }
-    else if(datos >= asume_nestor & datos < asume_cristina_1){
+      } else if (datos >= asume_nestor & datos < asume_cristina_1) {
       lista_factor_presidencias[[i]] <- "NK"
-    }
-    else if(datos >= asume_cristina_1 & datos < asume_cristina_2){
+      } else if (datos >= asume_cristina_1 & datos < asume_cristina_2) {
       lista_factor_presidencias[[i]] <- "CFK1"
-    }
-    else if(datos >= asume_cristina_2 & datos < asume_macri){
+      } else if (datos >= asume_cristina_2 & datos < asume_macri) {
       lista_factor_presidencias[[i]] <- "CFK2"
-    }
-    else if(datos >= asume_macri){
+      } else if(datos >= asume_macri) {
       lista_factor_presidencias[[i]] <- "MM"
-    }
+      }
     i <- i + 1
   }
   return(unlist(lista_factor_presidencias))
