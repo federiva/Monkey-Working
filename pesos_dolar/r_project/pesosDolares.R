@@ -21,7 +21,7 @@ dev.off()
 asume_nestor <- as.Date("2003-05-26")
 asume_cristina_1 <- as.Date("2007-12-10")
 asume_cristina_2 <- as.Date("2011-12-12")
-asume_miauri <- as.Date("2015-12-11")
+asume_macri <- as.Date("2015-12-11")
 # We wrote a function using the limit dates previously used in order to add a new column of factors by president in our data.frame 
 factorPresidencias <- function(date_vectors){
   # Initialize an empty list
@@ -38,10 +38,10 @@ factorPresidencias <- function(date_vectors){
     else if(datos >= asume_cristina_1 & datos < asume_cristina_2){
       lista_factor_presidencias[[i]] <- "CFK1"
     }
-    else if(datos >= asume_cristina_2 & datos < asume_miauri){
+    else if(datos >= asume_cristina_2 & datos < asume_macri){
       lista_factor_presidencias[[i]] <- "CFK2"
     }
-    else if(datos >= asume_miauri){
+    else if(datos >= asume_macri){
       lista_factor_presidencias[[i]] <- "MM"
     }
     i <- i + 1

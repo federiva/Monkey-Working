@@ -1,4 +1,4 @@
-
+load("currencyCrisis.RData")
 
 dataCurrency <- read.csv("../data/data_peso_dolar.csv")
 # Converting to an object of class date 
@@ -42,31 +42,34 @@ dataCurrency$Presidencia <- factor_presidente
 dataCurrency$Presidencia <- as.factor(dataCurrency$Presidencia)
 # Explore the dataset
 str(dataCurrency)
-
-# Porcentual variation ----------------------------------------------------
-
-
-# What's the daily porcentual variation of the exchange rate? 
-# And in the n-th of k days period relative to the n-1 period of k days?
-porcentualVariation <- function(input_data, index, k_days, dif = T){
-  k <- k_days - 1
-  result <- list()
-  for (i in 1:c(length(datos))){
-    if (i <= (length(datos)-ventana)){
-      if (dif == F){
-        res_parc <- sum(c(datos[i]:datos[i+ventana-1]))
-      }
-      if (dif == T){
-        res_parc <- datos[i+ventana-1] - datos[i]}
-    }
-    resultado[[i]] <- res_parc/ventana
+# Daily Percentage Change ----------------------------------------------------
+# What's the daily percentage change of the exchange rate ARS/USD? 
+DPC <- function(input_data, index){
+  variation <- list(0)
+  n_iteration <- 2
+  for (i in seq(1,length(input_data[,index])-1,1)){
+    n_interval <- input_data[i, index]
+    nk_interval <- input_data[i+1, index]
+    variation[[n_iteration]] <- ((nk_interval-n_interval)/n_interval)*100
+    n_iteration <- n_iteration + 1
   }
-  return(resultado)
+  output_data <- input_data
+  output_data$variation <- unlist(variation)
+  return(output_data)
 }
-#intervalo i 
-(i) : (i + k) 
-#intervalo i + k 
-(i + k + 1) : (i + k + 1 + k)
+  
+variation <- DPC(input_data = dataCurrency,index = 2)
+
+plot(variation$fecha, variation$variation, type="p", 
+     col=variation$Presidencia,
+     cex=0.2)
+
+which(variation$variation == max(variation$variation)) #3562
+plot(variation$fecha[3512:3612], variation$variation[3512:3612], type="l")
+plot(variation$fecha[1:300], variation$variation[1:300], type="l")
+
+variation <- porcentualVariation(input_data = dataCurrency,index = 2, k_days = 5 )
+plot(c(1:length(variation)), variation, type="l")
 
 which(dataDolar$fecha == "2015-12-1")
 cambio_3 <- cambio(dataDolar$divisa_venta, 10, dif=T)
