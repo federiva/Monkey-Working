@@ -9,11 +9,11 @@ dataDolar$fecha <- as.Date(dataDolar$fecha, "%d/%m/%Y")
 # Plotting the first plot and saving it as a .png file
 # save the plot as a png file
 png(filename = "firstPlotDollarPriceVSDate.png", width = 17, height = 12,units = "cm", res = 300 )
-plot(x = dataDolar$fecha,
-     y = dataDolar$divisa_venta,
-     type = "l", 
-     xlab="Date",
-     ylab="Argentine Peso / US Dollar")
+plot(x    = dataDolar$fecha,
+     y    = dataDolar$divisa_venta,
+     type = "l",
+     xlab = "Date",
+     ylab = "Argentine Peso / US Dollar")
 dev.off()
 # As the days were mostly in weekends (due to Argentinian's elections
 # are made in sunday), we changed the original date 
@@ -31,6 +31,7 @@ factorPresidencias <- function(date_vectors){
   for (datos in date_vectors) {
     if (datos < asume_nestor) {
       lista_factor_presidencias[[i]] <- "OTRO"
+<<<<<<< HEAD
       } else if (datos >= asume_nestor & datos < asume_cristina_1) {
       lista_factor_presidencias[[i]] <- "NK"
       } else if (datos >= asume_cristina_1 & datos < asume_cristina_2) {
@@ -38,6 +39,15 @@ factorPresidencias <- function(date_vectors){
       } else if (datos >= asume_cristina_2 & datos < asume_macri) {
       lista_factor_presidencias[[i]] <- "CFK2"
       } else if(datos >= asume_macri) {
+=======
+    } else if (datos >= asume_nestor & datos < asume_cristina_1) {
+      lista_factor_presidencias[[i]] <- "NK"
+    } else if (datos >= asume_cristina_1 & datos < asume_cristina_2) {
+      lista_factor_presidencias[[i]] <- "CFK1"
+    } else if (datos >= asume_cristina_2 & datos < asume_macri) {
+      lista_factor_presidencias[[i]] <- "CFK2"
+    } else if (datos >= asume_macri) {
+>>>>>>> 85b1e30b13f1600bf26e257d5b6a54a41951b928
       lista_factor_presidencias[[i]] <- "MM"
       }
     i <- i + 1
@@ -61,19 +71,19 @@ colores <- c("orange3",  "steelblue4", "red","yellowgreen","gray20")
 # Set the colors
 palette(colores)
 # Plot
-plot(x = dataDolar$fecha,
-     y = dataDolar$divisa_venta,
-     xlab="Date",
-     ylab="Argentine Peso / US Dollar",
-     type="p",
-     col=dataDolar$Presidencia,
-     cex=0.25
-)
+plot(x    = dataDolar$fecha,
+     y    = dataDolar$divisa_venta,
+     xlab = "Date",
+     ylab = "Argentine Peso / US Dollar",
+     type = "p",
+     col  = dataDolar$Presidencia,
+     cex  = 0.25)
 # Add legend
-legend("topleft", legend = levels(dataDolar$Presidencia),
-       col = 1:5,
-       lwd = c(3,3,3,3),
-       cex = 0.75,
+legend("topleft",
+       legend  = levels(dataDolar$Presidencia),
+       col     = 1:5,
+       lwd     = c(3,3,3,3),
+       cex     = 0.75,
        box.lty = 0)
 dev.off()
 # Others ------------------------------------------------------------------
