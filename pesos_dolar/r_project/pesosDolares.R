@@ -30,8 +30,7 @@ factorPresidencias <- function(date_vectors){
   i <- 1 
   for (datos in date_vectors) {
     if (datos < asume_nestor) {
-      lista_factor_presidencias[[i]] <- "OTRO"
-<<<<<<< HEAD
+      lista_factor_presidencias[[i]] <- "ED"
       } else if (datos >= asume_nestor & datos < asume_cristina_1) {
       lista_factor_presidencias[[i]] <- "NK"
       } else if (datos >= asume_cristina_1 & datos < asume_cristina_2) {
@@ -39,15 +38,6 @@ factorPresidencias <- function(date_vectors){
       } else if (datos >= asume_cristina_2 & datos < asume_macri) {
       lista_factor_presidencias[[i]] <- "CFK2"
       } else if(datos >= asume_macri) {
-=======
-    } else if (datos >= asume_nestor & datos < asume_cristina_1) {
-      lista_factor_presidencias[[i]] <- "NK"
-    } else if (datos >= asume_cristina_1 & datos < asume_cristina_2) {
-      lista_factor_presidencias[[i]] <- "CFK1"
-    } else if (datos >= asume_cristina_2 & datos < asume_macri) {
-      lista_factor_presidencias[[i]] <- "CFK2"
-    } else if (datos >= asume_macri) {
->>>>>>> 85b1e30b13f1600bf26e257d5b6a54a41951b928
       lista_factor_presidencias[[i]] <- "MM"
       }
     i <- i + 1
