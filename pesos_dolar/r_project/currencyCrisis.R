@@ -1,5 +1,8 @@
-load("currencyCrisis.RData")
-
+# For local use 
+# load("currencyCrisis.RData")
+# save.image(file =  "currencyCrisis.RData")
+# Reading data ------------------------------------------------------------
+#Read the data
 pesoDollarDataSet <- read.csv("../data/pesoDollarDataSet.csv")
 # Converting to an object of class date 
 pesoDollarDataSet$fecha <- as.Date(pesoDollarDataSet$fecha, "%Y-%m-%d")
@@ -30,7 +33,6 @@ DPC <- function(input_data, index){
 }
 # Run the function  
 dailyPercentageChange <- DPC(input_data = pesoDollarDataSet,index = 2)
-
 
 # Plotting ----------------------------------------------------------------
 # Choose the colors
@@ -65,7 +67,7 @@ legend("topleft",
 dev.off()
 
 
-# Top ten  ----------------------------------------------------------------
+# Top ten DPCs ----------------------------------------------------------------
 
 topTenIncrease <- dailyPercentageChange[order(dailyPercentageChange$variation, decreasing = T),][1:10,]
 
@@ -147,49 +149,91 @@ legend("topright",
        box.lty = 0)
 dev.off()
 
-colores <- c(CFK1="orange3", NK="yellowgreen", CFK2="steelblue4", MM="red",  OTRO="gray20")
-barplot(height = sort(table(topTenIncrease$Presidencia)), 
-        col=colores,
-        xlab = "President",
-        ylab = "Frecuency",names.arg = c("Fernandez 1", "Kirchner", "Fernandez 2", "Macri", "Duhalde")
-        )
 
-png(filename = "Grafico_Dolares_Ardilla.png", width = 18, height = 15,units = "cm", res = 300 )
-par(mfrow=c(2,1))
-plot(dataDolar$fecha, cambio_3, 
-     type = "l", 
-     xlab="Fecha",
-     ylab="Tasa de cambio en 10 dias")
-abline(v=dataDolar$fecha[3552], lty=3)
-plot(dataDolar, 
-     type ="l", 
-     xlab="Fecha",
-     ylab="Pesos por dólar (divisa)")
-abline(v=dataDolar$fecha[3552], lty=3)
-dev.off()
-
-
-plotPNGs <- function(data_input, steps){
-  iteracionN <- 1
-  for (i in seq(1,nrow(data_input),steps)){
-    filenameOut <- paste("./pngs/file_",formatC(iteracionN,width=5, flag=0),".png", sep="")
-    print(paste("Graficando:", filenameOut))
-    png(filename = filenameOut, width = 8, height = 6,units = "cm", res = 300 )
-    plot(data_input[1:i,],
-         xlim=c(min(data_input[,1]), max(data_input[,1])),
-         ylim=c(min(data_input[,2]), max(data_input[,2])),
-         type = "l", 
-         xlab="Fecha",
-         ylab="Pesos por dólar",
-         cex.axis=0.5,
-         cex.lab=0.5, 
-         las = 3)
+# Making an animated gif from png files -----------------------------------
+plotPNGs <- function(dataInput, steps, outputPath){
+  # dataInput is the dataframe used to plot 
+  # steps is the number between datapoints to be plotted
+  # outputPath is the path to the directory where the files will be stored in
+  # Set a counter as 1 
+  iterationN <- 1
+  # Start a loop using the step number given as parameter in the function 
+  for (i in seq(1,nrow(dataInput),steps)){
+    # Output filename. formatC is used to add a number of five digits used 
+    # to avoid listing the files after with imageMagick
+    filenameOut <- paste(outputPath,"file_",formatC(iterationN,width=5, flag=0),".png", sep="")
+    # Save a png file of the individual plot. Parameters could be changed 
+    png(filename = filenameOut, width = 600, height = 410,units = "px")
+    # Paste your plot here
+    # Scatterplot
+    plot(x        = dailyPercentageChange$fecha[1:i],
+         y        = dailyPercentageChange$variation[1:i],
+         xlim     = c(min(dailyPercentageChange$fecha),
+                      max(dailyPercentageChange$fecha)),
+         ylim     = c(min(dailyPercentageChange$variation, na.rm = T),
+                      max(dailyPercentageChange$variation, na.rm = T)),
+         ylab     = "Percentage Change (%)",
+         xlab     = "Date",
+         main     = "Daily percentage change (DPC) for the exchange rate ARS/USD \n 
+     in the period 2002-01-11 to 2018-06-05",
+         cex.main = 1.0,
+         type     = "o",
+         lty      = 3,
+         col      = dailyPercentageChange$Presidencia,
+         cex      = 0.7)
+    # Add legend
+    legend("topleft",
+           legend  = levels(dailyPercentageChange$Presidencia),
+           col     = 1:5,
+           lwd     = c(3,3,3,3),
+           cex     = 0.6,
+           box.lty = 0)
+    # Your plot ends here
     dev.off()
-    iteracionN <- iteracionN + 1
+    #increment
+    iterationN <- iterationN + 1
   }
 }
-plotPNGs(dataDolar[1:20,], 5)
-plotPNGs(dataDolar, 10)
-
-
-save.image(file =  "currencyCrisis.RData")
+plotPNGs(dailyPercentageChange, steps = 23, outputPath = "plot1/")
+# Second animated plot ----------------------------------------------------
+plotPNGs <- function(dataInput, steps, outputPath){
+  # Set a counter as 1 
+  iterationN <- 1
+  # Start a loop using the step number given as parameter in the function 
+  for (i in seq(1,nrow(dataInput),steps)){
+    # Output filename. formatC is used to add a number of five digits used 
+    # to avoid listing the files after with imageMagick
+    filenameOut <- paste(outputPath,"file_",formatC(iterationN,width=5, flag=0),".png", sep="")
+    # Save a png file of the individual plot. Parameters could be changed 
+    png(filename = filenameOut, width = 600, height = 410,units = "px")
+    # Paste your plot here
+    # Scatterplot
+    plot(x        = dailyPercentageChange$fecha[1:i],
+         y        = dailyPercentageChange$divisa_venta[1:i],
+         xlim     = c(min(dailyPercentageChange$fecha),
+                      max(dailyPercentageChange$fecha)),
+         ylim     = c(min(dailyPercentageChange$divisa_venta, na.rm = T),
+                      max(dailyPercentageChange$divisa_venta, na.rm = T)),
+         ylab     = "Exchange rate (ARS/USD)",
+         xlab     = "Date",
+         main     = "Exchange rate ARS/USD \n 
+         in the period 2002-01-11 to 2018-06-05",
+         cex.main = 1.0,
+         type     = "o",
+         lty      = 3,
+         col      = dailyPercentageChange$Presidencia,
+         cex      = 0.7)
+    # Add legend
+    legend("topleft",
+           legend  = levels(dailyPercentageChange$Presidencia),
+           col     = 1:5,
+           lwd     = c(3,3,3,3),
+           cex     = 0.6,
+           box.lty = 0)
+    # Your plot ends here
+    dev.off()
+    #increment
+    iterationN <- iterationN + 1
+  }
+}
+plotPNGs(dailyPercentageChange, steps = 23, outputPath = "plot2/")
