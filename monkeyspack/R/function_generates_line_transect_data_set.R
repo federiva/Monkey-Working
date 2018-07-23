@@ -40,6 +40,6 @@ GenerateDataset <- function(num.obs) {
   # Convert to a data.frame
   result.data <- as.data.frame(result.data)
   # Set the distances as numeric
-  result.data$Distance <- as.numeric(as.character(result.data$Distance))
+  result.data$distance <- as.numeric(as.character(result.data$distance))
   return(result.data)
 }
