@@ -35,6 +35,7 @@ ej1.result.is.repeated <- FindRepetitionsSU(data.x = ej1, ncol.names.su = 1, nco
 ej1.result.frequencies <- FindRepetitionsSU(data.x = ej1, ncol.names.su = 1, ncol.observation = 2, result = "frequency")
 
 # data.set example number 2. 
+
 # It has 5 different sample units, each one with 4 observations of class numeric.
 col.names.su.2 <- c(rep("M1", 1),rep("M2",1),rep("M3",1),rep("M4",1), rep("M5", 1), rep("M1", 2),rep("M2",2),rep("M3",2),rep("M4",2), rep("M5", 2), rep("M1", 1),rep("M2",1),rep("M3",1),rep("M4",1), rep("M5", 1))  # sample units are mixed.
 simulated.values <- c(rep(1,20), rep(2,20), rep(3,20), rep(4,20), rep(5,20), rep(6,20))  # create a pool of species. From there, obtain a sample of size = 20.
