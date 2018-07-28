@@ -10,17 +10,11 @@ MonthlyValue(data.x, ncol.interest, value = "mean", ncol.date = NULL, ncol.year 
 \arguments{
 \item{data.x}{It's a data.frame with daily data for some variable.}
 
-\item{ncol.interest}{Column's index of the variable x (numeric).}
-
 \item{value}{If value = "mean", functions returns monthly mean. If value = "accumulated", it returns the sum. Default is "mean".}
 
-\item{ncol.date}{Column's index of the dates's column. Default is NULL.}
+\item{na.presence}{If TRUE, variable has NAs in it. If FALSE, it hasn't. Default is TRUE.}
 
-\item{ncol.year}{Index of the column which has the year of each x[i, ]. Default is NULL.}
-
-\item{ncol.month}{Index of the column which has the number of the month of each x[i, ]. Default is NULL (numeric).}
-
-\item{na.presence}{If TRUE, variable has NAs in it. If FALSE, it hasn't. Default is FALSE.}
+\item{ncol.interest}{Column's index of the variable x (numeric).}
 }
 \value{
 It returns a data.frame with three columns. 1) $month.order: Column with the number of the month (from 1 to 12) corresponding to each value, 2) $year: Column with the year, and 3) $mean.value or $accumulated.value: Column with the monthly value of the observation
