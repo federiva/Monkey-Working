@@ -37,7 +37,7 @@ OrganizeDateColumns <- function(data.x, ncol.date = 1, orders = "mdyHMS", ncol.d
   #
   # Organizes dates's columns using lubridate
   # If columns with days, months or years are NULL, creates these columns with a 
-  # function inside de function
+  # function inside the function
   #
   OrganizeDate <- function(ncol.time, fun) {
     names.col <- colnames(data.x)
@@ -60,7 +60,7 @@ OrganizeDateColumns <- function(data.x, ncol.date = 1, orders = "mdyHMS", ncol.d
     data.x <- data.x
   }
   #  
-  # Apply internal function to data
+  # Run internal function to data
   #
   data.x <- OrganizeDate(ncol.time = ncol.day, fun = "day")
   data.x <- OrganizeDate(ncol.time = ncol.month, fun = "month")
@@ -68,7 +68,7 @@ OrganizeDateColumns <- function(data.x, ncol.date = 1, orders = "mdyHMS", ncol.d
   data.x[ , ncol.date] <- as.Date(paste(data.x$year, data.x$month, data.x$day, sep = "-"))
   return(data.x)
 }
-# Apply the function
+# Run the function
 # 
 calera_organized <- OrganizeDateColumns(data.x = calera_raw, ncol.date = 1, orders = "mdyHMS", ncol.day = NULL, ncol.month = NULL, ncol.year = NULL)
 head(calera_organized)
@@ -127,10 +127,10 @@ HourlyToDaily <- function(data.x, ncol.obs, ncol.date, na.presence = TRUE, value
           }
         }
         date.x[k] <- x.day[ , ncol.date][1] 
-      } # end cicle day
+      } # end cycle day
       x.daily.per.month[[j]] <- unlist(x.value)
       date.list[[j]]         <- date.x     
-    } # end cicle month
+    } # end cycle month
     x.daily.per.years[[c]] <- unlist(x.daily.per.month)
     date.tot[[c]]          <- unlist(date.list)    
     c = c + 1
@@ -166,7 +166,7 @@ MonthlyValue <- function(data.x, ncol.obs, value = "mean",
                          na.presence = TRUE) {
   #
   if (!any(value == c("mean", "accumulated"))) {
-    stop(" value must to be 'mean' or 'accumulated'")
+    stop("value must be 'mean' or 'accumulated'")
   }
   #
   # Calculate the mean of the variable of interest
@@ -197,12 +197,12 @@ MonthlyValue <- function(data.x, ncol.obs, value = "mean",
         name.month[j] <- j
         name.year[j]  <- i
       }
-    } # end cicle month
+    } # end cycle month
     x.per.month[[c]] <- unlist(x.value)
     name.month.tot[[c]]    <- unlist(name.month)
     name.year.tot[[c]]     <- unlist(name.year)
     c = c + 1
-  } # end year
+  } # end cycle year
   monthly.data <- as.data.frame(cbind(unlist(name.month.tot), 
                                       unlist(name.year.tot),
                                       unlist(x.per.month)))
@@ -219,10 +219,10 @@ d_mm_ac <- OrganizeDateColumns(data.x = d_mm_ac, ncol.date = 1, orders = "ymd", 
 m_mm_ac <- MonthlyValue(data.x = d_mm_ac, ncol.obs = 2, value = "accumulated", na.presence = TRUE)
 head(m_mm_ac)
 # 
-# Add ceros so we can make a plot
-data.ceros <- as.data.frame(cbind(1:9, rep(x = 2007, times = 9), rep(x = 0, times = 9)))
-colnames(data.ceros) <- c("month.order", "year", "accumulated.value")
-m_mm_ac <- rbind.data.frame(data.ceros, m_mm_ac)
+# Add zeros so we can make a plot
+data.zeros <- as.data.frame(cbind(1:9, rep(x = 2007, times = 9), rep(x = 0, times = 9)))
+colnames(data.zeros) <- c("month.order", "year", "accumulated.value")
+m_mm_ac <- rbind.data.frame(data.zeros, m_mm_ac)
 head(m_mm_ac)
 #
 # 2) a) Monthly mean temperature
@@ -231,7 +231,7 @@ d_t_mean <- OrganizeDateColumns(data.x = d_t_mean, ncol.date = 1, orders = "ymd"
 m_t_mean <- MonthlyValue(data.x = d_t_mean, ncol.obs = 2, value = "mean", na.presence = TRUE)
 head(m_t_mean)
 #
-## Add NA so we can make a plot 
+## Add NA's so we can make a plot 
 data.nas <- as.data.frame(cbind(1:9, rep(x = 2007, times = 9), rep(x = NA, times = 9)))
 colnames(data.nas) <- c("month.order", "year", "mean.value")
 m_t_mean <- rbind.data.frame(data.nas, m_t_mean)
@@ -278,4 +278,3 @@ plot.calera <- function() {
   par(parameters.1)
 }
 plot_calera <- plot.calera()
-
