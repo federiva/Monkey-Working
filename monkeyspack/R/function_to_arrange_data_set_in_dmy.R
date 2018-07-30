@@ -28,19 +28,16 @@ OrganizeDateColumns <- function(data.x, ncol.date = 1, orders = "mdyHMS", ncol.d
         col.time <-  match.fun(fun)(data.x[ , ncol.date])
         data.x[ ,(ncol(data.x) + 1)] <- col.time
         colnames(data.x) <- c(names.col, fun)
-        print("pasa por ciclo 1")
       } else {
         data.x[ , ncol.date] <- parse_date_time(x = data.x[ , ncol.date], 
                                                 orders = orders)
         col.time <- match.fun(fun)(data.x[ , ncol.date])
         data.x[ ,(ncol(data.x) + 1)] <- col.time
         colnames(data.x) <- c(names.col, fun)
-        print("pasa por ciclo 2")
       } 
     } else {
       col.time <- data.x[ , ncol.time]
       colnames(data.x)[ncol.time] <- fun 
-      print("pasa por ciclo 3")
     }
     data.x <- data.x
   }
