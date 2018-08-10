@@ -6,3 +6,4 @@
 *.RData
 *.gbff
 .*~
+local_tests
