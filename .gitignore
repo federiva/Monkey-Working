@@ -4,3 +4,5 @@
 *.gif
 *.rdata
 *.RData
+*.gbff
+.*~
