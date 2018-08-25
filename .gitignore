@@ -7,3 +7,15 @@
 *.gbff
 .*~
 local_tests
+# from the post 1 in bioinformatic series
+mitochondrial_DNA/drawings/
+mitochondrial_DNA/r_project_mitochondrial_DNA/R/GlobalEnvironmentParsingGBFF.Rdata
+mitochondrial_DNA/r_project_mitochondrial_DNA/R/post_1_mitochondrial_parsing_gbfiles.R
+mitochondrial_DNA/r_project_mitochondrial_DNA/R/post_1_mtdna_getting_sequences.R
+mitochondrial_DNA/r_project_mitochondrial_DNA/csv_files/
+mitochondrial_DNA/r_project_mitochondrial_DNA/fasta_seqs/
+mitochondrial_DNA/r_project_mitochondrial_DNA/gbff_filtered_files/
+mitochondrial_DNA/r_project_mitochondrial_DNA/tmp_folder/
+mitochondrial_DNA/r_project_mitochondrial_DNA/tmp_parsed_files/
+mitochondrial_DNA/raw_data/
+
