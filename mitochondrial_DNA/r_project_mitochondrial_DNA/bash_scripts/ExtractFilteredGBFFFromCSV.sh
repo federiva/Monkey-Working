@@ -6,8 +6,8 @@ function ExtractFilteredGBFFFromCSV () {
 # $1 is the path to the file filtered.csv which is the output of an R function 
 # named FilterParsedGBFF()
 # $2 is the path to the .gbff file which contains the entries to be extracted
-  if [ ! -d "../gbff_filtered_files" ]; then 
-    mkdir ../gbff_filtered_files 
+  if [ ! -d "./gbff_filtered_files" ]; then 
+    mkdir ./gbff_filtered_files 
   fi
   let lineNumber=1
   totalEntries=$(($(cat $1 | wc -l)-1))
@@ -17,7 +17,7 @@ function ExtractFilteredGBFFFromCSV () {
     echo Extracting gbbf entry: "$(($lineNumber - 1))" "of" "$totalEntries"
     accessionNumber=$(echo "$linesFromFilteredCSV" | awk 'BEGIN{FS=","}; { print $7 }')
     organism=$(echo "$linesFromFilteredCSV" | awk 'BEGIN{FS=","}; { print $4 }' | sed -e 's/ /_/g')
-    outputFileName=$(echo ../gbff_filtered_files/"$organism"_"$accessionNumber".gbff)
+    outputFileName=$(echo ./gbff_filtered_files/"$organism"_"$accessionNumber".gbff)
     fromLine=$(echo "$linesFromFilteredCSV" | awk 'BEGIN{FS=","}; { print $1 }')
     toLine=$(echo $linesFromFilteredCSV | awk 'BEGIN{FS=","}; { print $2 }')
     diffLine=$(($toLine - $fromLine))
